@@ -1,15 +1,15 @@
-name: 'Creates/Updates Shopify Theme'
-description: 'Creates/Updates a Shopify theme and returns the preview link and admin link'
+name: "Creates/Updates Shopify Theme"
+description: "Creates/Updates a Shopify theme and returns the preview link and admin link"
 
 outputs:
   preview-link:
-    description: 'Preview Link'
+    description: "Preview Link"
     value: ${{ steps.shopify-theme-data.outputs.preview-link }}
   editor-link:
-    description: 'Editor Link'
+    description: "Editor Link"
     value: ${{ steps.shopify-theme-data.outputs.editor-link }}
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - uses: actions/setup-node@v3
       with:
@@ -17,7 +17,7 @@ runs:
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: 3.1
-        bundler: 'latest'
+        bundler: "latest"
 
     - name: Install Shopify CLI
       run: npm install -g @shopify/cli @shopify/theme # tested using @shopify/cli@3.47.1 and @shopify/theme@3.47.1 but we don't scope the versions to see how well the task performs
