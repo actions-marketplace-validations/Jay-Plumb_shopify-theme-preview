@@ -1,0 +1,76 @@
+name: 'Creates/Updates Shopify Theme'
+description: 'Creates/Updates a Shopify theme and returns the preview link and admin link'
+
+outputs:
+  preview-link:
+    description: 'Preview Link'
+    value: ${{ steps.shopify-theme-data.outputs.preview-link }}
+  editor-link:
+    description: 'Editor Link'
+    value: ${{ steps.shopify-theme-data.outputs.editor-link }}
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.1
+        bundler: 'latest'
+
+    - name: Install Shopify CLI
+      run: npm install -g @shopify/cli @shopify/theme # tested using @shopify/cli@3.47.1 and @shopify/theme@3.47.1 but we don't scope the versions to see how well the task performs
+      shell: bash
+
+    - name: Set CURRENT_BRANCH
+      run: |
+        echo "CURRENT_BRANCH=${{ github.event.pull_request.head.ref }}" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Get CURRENT_BRANCH
+      run: echo ${{ env.CURRENT_BRANCH }}
+      shell: bash
+
+    - name: Github Username [ABC]
+      run: |
+        echo ${{ github.actor }} | sed -e 's/^\(.\{3\}\).*/\U\1/'
+        echo "FIRST_THREE_GITHUB_USERNAME=$(echo ${{ github.actor }} | sed -e 's/^\(.\{3\}\).*/\U\1/')" >> $GITHUB_ENV
+      shell: bash
+
+    - name: THEME_ID
+      run: |
+        echo "THEME_ID=$(echo $(shopify theme list | grep \${{ env.CURRENT_BRANCH }} | awk '{print $NF}' | tr -d '#'))" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Create Shopify Theme
+      if: ${{ env.THEME_ID == '' }}
+      run: |
+        npm i
+        npm run build:production
+        echo "JSON_RESPONSE=$(echo $(shopify theme push --unpublished --json --theme='[${{ env.FIRST_THREE_GITHUB_USERNAME }}] - ${{ env.CURRENT_BRANCH }}' --only assets/ config/ layout/ locales/ sections/ snippets/ templates/ ))" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Update Shopify Theme
+      if: ${{ env.THEME_ID != '' }}
+      # On subsequent pushes we exclude all .json files within /templates folder so as to not override QA changes
+      run: |
+        echo "Theme found: UPDATE"
+        npm i
+        npm run build:production
+        echo "JSON_RESPONSE=$(echo $(shopify theme push -t ${{ env.THEME_ID }} --only assets/ config/ layout/ locales/ sections/ snippets/ templates/ --ignore templates/*json --json ))" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Extract JSON Entries
+      run: | # Can extract more data from response if needed
+        echo ${{ env.JSON_RESPONSE }}
+        echo "THEME_ID=$(echo '${{ env.JSON_RESPONSE }}' | jq -r '.theme.id')" >> $GITHUB_ENV
+        echo "PREVIEW_URL=$(echo '${{ env.JSON_RESPONSE }}' | jq -r '.theme.preview_url')" >> $GITHUB_ENV
+        echo "EDITOR_URL=$(echo '${{ env.JSON_RESPONSE }}' | jq -r '.theme.editor_url')" >> $GITHUB_ENV
+      shell: bash
+
+    - id: shopify-theme-data
+      run: |
+        echo "preview-link=$(echo $PREVIEW_URL)" >> $GITHUB_OUTPUT
+        echo "editor-link=$(echo $EDITOR_URL)" >> $GITHUB_OUTPUT
+      shell: bash

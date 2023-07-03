@@ -1,0 +1,67 @@
+# Creates/Updates a Shopify theme and adds the preview link within the PR description and as a comment
+# The first time the theme is created, event .json files within the /templates folder are pushed to the theme
+# Subsequte updates to an existing theme does not push any .json files within the /templates folder
+#
+# @devs For notes on creating composite actions: https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
+name: "Shoify Auto Preview"
+description: "Creates/Updates a Shopify theme and adds the preview link within the PR description and as a comment"
+branding:
+  icon: shopping-cart
+  color: green
+inputs:
+  shopify_flag_store:
+    description: "The Shopify store URL e.g. store-name.myshopify.com"
+    required: true
+  shopify_cli_theme_token:
+    description: "The Shopify CLI theme token created via custom app"
+    required: true
+
+env:
+  GH_TOKEN: ${{ github.token }}
+  SHOPIFY_FLAG_STORE: ${{ inputs.SHOPIFY_DEV_STORE_URL }}
+  SHOPIFY_CLI_THEME_TOKEN: ${{ inputs.STAGING_SHOP_ACCESS_TOKEN }}
+  SHOPIFY_CLI_TTY: 0 # https://shopify.dev/docs/themes/tools/cli/ci-cd#step-2-integrate-shopify-cli-into-your-pipeline TODO when there is a theme limit, the following should stop interactive prompts but it doesn't seem to work
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+runs:
+  using: "composite"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - id: preview-link
+        uses: ./.github/actions/action-shopify-theme
+
+      - run: |
+          echo preview link ${{ steps.preview-link.outputs.preview-link }}
+          echo preview link ${{ steps.preview-link.outputs.editor-link }}
+
+      - name: Extend/Modify PR Description
+        uses: ./.github/actions/action-pr-description
+        with:
+          preview-link: ${{ steps.preview-link.outputs.preview-link }}
+          editor-link: ${{ steps.preview-link.outputs.editor-link }}
+
+      - name: Comment PR
+        uses: ./.github/actions/action-pr-comment
+        with:
+          preview-link: ${{ steps.preview-link.outputs.preview-link }}
+          editor-link: ${{ steps.preview-link.outputs.editor-link }}
+
+      - name: DEBUG Variables
+        run: |
+          echo ${{ env.JSON_RESPONSE }}
+          echo ${{ env.THEME_ID }}
+          echo ${{ env.PREVIEW_URL }}
+          echo ${{ env.EDITOR_URL }}
+          echo ${{ env.HAS_PREVIEW_LINK }}
+          echo ${{ github.event_name }}
+          echo ${{ github.event.action }}
+          echo ${{ github.workflow }}
+          echo ${{ github.ref }}
+          echo ${{ steps.fc.outputs.comment-id }}
+          echo ${{ github.event.pull_request.number }}
