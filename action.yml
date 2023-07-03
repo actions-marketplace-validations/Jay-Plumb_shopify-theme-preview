@@ -33,25 +33,6 @@ runs:
     steps:
       - uses: actions/checkout@v3
 
-      - id: preview-link
-        uses: ./.github/actions/action-shopify-theme
-
-      - run: |
-          echo preview link ${{ steps.preview-link.outputs.preview-link }}
-          echo preview link ${{ steps.preview-link.outputs.editor-link }}
-
-      - name: Extend/Modify PR Description
-        uses: ./.github/actions/action-pr-description
-        with:
-          preview-link: ${{ steps.preview-link.outputs.preview-link }}
-          editor-link: ${{ steps.preview-link.outputs.editor-link }}
-
-      - name: Comment PR
-        uses: ./.github/actions/action-pr-comment
-        with:
-          preview-link: ${{ steps.preview-link.outputs.preview-link }}
-          editor-link: ${{ steps.preview-link.outputs.editor-link }}
-
       - name: DEBUG Variables
         run: |
           echo ${{ env.JSON_RESPONSE }}
