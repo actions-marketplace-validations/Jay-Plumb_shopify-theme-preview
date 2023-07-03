@@ -24,6 +24,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - run: |
+        echo Hello ${{ inputs.shopify-flag-store }}.
+        echo Hello ${{ inputs.shopify-cli-theme-token }}.
+      shell: bash
+
       - id: preview-link
         uses: Jay-Plumb/shopify-theme-preview@main # TODO
         with:
