@@ -14,9 +14,11 @@ inputs:
   shopify-flag-store:
     description: "The Shopify store URL e.g. store-name.myshopify.com"
     required: true
+    default: "World"
   shopify-cli-theme-token:
     description: "The Shopify CLI theme token created via custom app"
     required: true
+    default: "World"
 env:
   SHOPIFY_FLAG_STORE: ${{ inputs.shopify-flag-store }}
   SHOPIFY_CLI_THEME_TOKEN: ${{ inputs.shopify-cli-theme-token }}
