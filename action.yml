@@ -11,7 +11,7 @@ inputs:
     description: "The Shopify store URL e.g. store-name.myshopify.com"
     required: true
   shopify-cli-theme-token:
-    description: "The Shopify CLI theme token created via custom app"
+    description: "The Shopify CLI theme token created via a custom app"
     required: true
 runs:
   using: "composite"
