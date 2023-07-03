@@ -1,0 +1,38 @@
+name: 'Attach Shopify theme to PR description'
+description: 'Extends/Updates the PR description to attach the Shopify links'
+inputs:
+  preview-link:
+    description: 'The preview link'
+    required: true
+  editor-link:
+    description: 'The editor link'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Render template
+      id: template
+      uses: chuhlomin/render-template@v1.7 # https://github.com/marketplace/actions/render-template https://github.com/chuhlomin/render-template
+      with:
+        template: .github/preview-link-template.md
+        vars: |
+          preview_link: ${{ inputs.preview-link }}
+          editor_url: ${{ inputs.editor-link }}
+
+    - name: Existing Body
+      run: |
+        echo "HAS_PREVIEW_LINK=$(echo $(gh pr view ${{ github.event.number }} --json body | jq -r ".body | contains(\"### Preview Link\")"))" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Attach Preview Link
+      if: ${{ env.HAS_PREVIEW_LINK == 'false' }}
+      run: |
+        gh pr view ${{ github.event.number }} --json body | jq '. + { "new_body": "${{ steps.template.outputs.result }}"}' | jq -r '.body  + "\n ### Preview Link \n" + .new_body' | gh pr edit ${{ github.event.number }} --body-file -
+      shell: bash
+
+    - name: Update Preview Link
+      if: ${{ env.HAS_PREVIEW_LINK == 'true' }}
+      run: |
+        gh pr view ${{ github.event.number }} --json body | jq '.body |= (split("### Preview Link") | .[0])' | jq '. + { "new_body": "${{ steps.template.outputs.result }}"}' | jq -r '.body  + "### Preview Link \n" + .new_body' | gh pr edit ${{ github.event.number }} --body-file -
+      shell: bash

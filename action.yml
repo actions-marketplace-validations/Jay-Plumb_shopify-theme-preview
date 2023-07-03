@@ -17,5 +17,7 @@ runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v3
-    - run: echo Hello ${{ inputs.shopify-flag-store }}.
-      shell: bash
+    - run: |
+      echo Hello ${{ inputs.shopify-flag-store }}.
+      echo Hello ${{ inputs.shopify-cli-theme-token }}.
+    shell: bash
