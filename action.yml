@@ -9,17 +9,17 @@ branding:
   icon: shopping-cart
   color: green
 inputs:
-  shopify_flag_store:
+  shopify-flag-store:
     description: "The Shopify store URL e.g. store-name.myshopify.com"
     required: true
-  shopify_cli_theme_token:
+  shopify-cli-theme-token:
     description: "The Shopify CLI theme token created via custom app"
     required: true
 
 env:
   GH_TOKEN: ${{ github.token }}
-  SHOPIFY_FLAG_STORE: ${{ inputs.shopify_flag_store }}
-  SHOPIFY_CLI_THEME_TOKEN: ${{ inputs.shopify_cli_theme_token }}
+  SHOPIFY_FLAG_STORE: ${{ inputs.shopify-flag-store }}
+  SHOPIFY_CLI_THEME_TOKEN: ${{ inputs.shopify-cli-theme-token }}
   SHOPIFY_CLI_TTY: 0 # https://shopify.dev/docs/themes/tools/cli/ci-cd#step-2-integrate-shopify-cli-into-your-pipeline TODO when there is a theme limit, the following should stop interactive prompts but it doesn't seem to work
 
 runs:
