@@ -28,6 +28,7 @@ runs:
     - run: |
         echo preview link ${{ steps.preview-link.outputs.preview-link }}
         echo preview link ${{ steps.preview-link.outputs.editor-link }}
+      shell: bash
 
     - name: Extend/Modify PR Description
       uses: ./.github/actions/action-pr-description
@@ -54,3 +55,4 @@ runs:
           echo ${{ github.ref }}
           echo ${{ steps.fc.outputs.comment-id }}
           echo ${{ github.event.pull_request.number }}
+        shell: bash
