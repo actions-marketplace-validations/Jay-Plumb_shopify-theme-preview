@@ -26,8 +26,8 @@ jobs:
 
       - id: preview-link
         uses: ./action.yml
-        with: 
-         shopify_flag_store: ${{ env.SHOPIFY_FLAG_STORE }}
+        with:
+          shopify_flag_store: ${{ env.SHOPIFY_FLAG_STORE }}
           shopify_cli_theme_token: ${{ env.SHOPIFY_CLI_THEME_TOKEN }}
 
       - name: DEBUG Variables
