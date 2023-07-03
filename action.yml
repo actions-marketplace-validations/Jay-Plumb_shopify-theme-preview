@@ -26,8 +26,8 @@ runs:
       uses: ./.github/actions/action-shopify-theme
 
     - run: |
-      echo preview link ${{ steps.preview-link.outputs.preview-link }}
-      echo preview link ${{ steps.preview-link.outputs.editor-link }}
+        echo preview link ${{ steps.preview-link.outputs.preview-link }}
+        echo preview link ${{ steps.preview-link.outputs.editor-link }}
 
     - name: Extend/Modify PR Description
       uses: ./.github/actions/action-pr-description
