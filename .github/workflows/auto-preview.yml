@@ -29,17 +29,4 @@ jobs:
         with:
           shopify_flag_store: ${{ env.SHOPIFY_FLAG_STORE }}
           shopify_cli_theme_token: ${{ env.SHOPIFY_CLI_THEME_TOKEN }}
-
-      - name: DEBUG Variables
-        run: |
-          echo ${{ env.JSON_RESPONSE }}
-          echo ${{ env.THEME_ID }}
-          echo ${{ env.PREVIEW_URL }}
-          echo ${{ env.EDITOR_URL }}
-          echo ${{ env.HAS_PREVIEW_LINK }}
-          echo ${{ github.event_name }}
-          echo ${{ github.event.action }}
-          echo ${{ github.workflow }}
-          echo ${{ github.ref }}
-          echo ${{ steps.fc.outputs.comment-id }}
-          echo ${{ github.event.pull_request.number }}
+        secrets: inherit
