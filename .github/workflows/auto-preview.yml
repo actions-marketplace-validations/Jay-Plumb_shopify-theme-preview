@@ -29,4 +29,3 @@ jobs:
         with:
           shopify_flag_store: ${{ env.SHOPIFY_FLAG_STORE }}
           shopify_cli_theme_token: ${{ env.SHOPIFY_CLI_THEME_TOKEN }}
-        secrets: inherit
