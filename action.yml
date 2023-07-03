@@ -17,7 +17,6 @@ inputs:
     required: true
 
 env:
-  GH_TOKEN: ${{ github.token }}
   SHOPIFY_FLAG_STORE: ${{ inputs.shopify-flag-store }}
   SHOPIFY_CLI_THEME_TOKEN: ${{ inputs.shopify-cli-theme-token }}
   SHOPIFY_CLI_TTY: 0 # https://shopify.dev/docs/themes/tools/cli/ci-cd#step-2-integrate-shopify-cli-into-your-pipeline TODO when there is a theme limit, the following should stop interactive prompts but it doesn't seem to work
@@ -31,14 +30,4 @@ runs:
 
       - name: DEBUG Variables
         run: |
-          echo ${{ env.JSON_RESPONSE }}
-          echo ${{ env.THEME_ID }}
-          echo ${{ env.PREVIEW_URL }}
-          echo ${{ env.EDITOR_URL }}
-          echo ${{ env.HAS_PREVIEW_LINK }}
-          echo ${{ github.event_name }}
-          echo ${{ github.event.action }}
-          echo ${{ github.workflow }}
-          echo ${{ github.ref }}
-          echo ${{ steps.fc.outputs.comment-id }}
-          echo ${{ github.event.pull_request.number }}
+          echo 'hi'
