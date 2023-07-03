@@ -14,3 +14,8 @@ The workflow is triggered when a Pull Request is both opened and any additional 
 ## Existing Functionality Callouts
 
 > Currently, there is no support if you have a build step locally prior to shopify theme creation. If this would be of interest, open up a feature request.
+
+### Developer Notes
+
+git tag -a -m "shopify prevew theme auto attach to github description and comment" v1.0.1
+git push --follow-tags
