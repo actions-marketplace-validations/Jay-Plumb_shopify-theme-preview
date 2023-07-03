@@ -25,11 +25,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Debug
-        run: |
-          echo * ${{ env.SHOPIFY_FLAG_STORE }}.
-          echo * ${{ env.SHOPIFY_CLI_THEME_TOKEN }}.
-
       - id: preview-link
         uses: Jay-Plumb/shopify-theme-preview@branch # TODO
         with:
