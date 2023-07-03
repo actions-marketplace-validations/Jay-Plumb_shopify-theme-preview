@@ -6,6 +6,7 @@
 
 name: "Shopify Auto Preview"
 description: "Creates/Updates a Shopify theme and adds the preview link within the PR description and as a comment"
+
 inputs:
   shopify-flag-store:
     description: "The Shopify store URL e.g. store-name.myshopify.com"
@@ -13,6 +14,11 @@ inputs:
   shopify-cli-theme-token:
     description: "The Shopify CLI theme token created via a custom app"
     required: true
+
+branding:
+  icon: shopping-cart
+  color: white
+
 runs:
   using: "composite"
   steps:
