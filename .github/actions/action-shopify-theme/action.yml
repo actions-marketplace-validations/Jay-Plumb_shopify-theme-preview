@@ -51,10 +51,9 @@ runs:
 
     - name: Update Shopify Theme
       if: ${{ env.THEME_ID != '' }}
-      # On subsequent pushes we exclude all .json files within /templates folder so as to not override QA changes
       run: |
         echo "Theme found: UPDATE"
-        echo "JSON_RESPONSE=$(echo $(shopify theme push -t ${{ env.THEME_ID }} --only assets/ config/ layout/ locales/ sections/ snippets/ templates/ --ignore templates/*json --json ))" >> $GITHUB_ENV
+        echo "JSON_RESPONSE=$(echo $(shopify theme push -t ${{ env.THEME_ID }} --only assets/ config/ layout/ locales/ sections/ snippets/ templates/ ))" >> $GITHUB_ENV
       shell: bash
 
     - name: Extract JSON Entries
