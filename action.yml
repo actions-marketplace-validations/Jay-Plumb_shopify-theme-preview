@@ -7,18 +7,12 @@
 name: "Shopify Auto Preview"
 description: "Creates/Updates a Shopify theme and adds the preview link within the PR description and as a comment"
 inputs:
-  who-to-greet: # id of input
-    description: "Who to greet"
-    required: true
-    default: "World"
   shopify-flag-store:
     description: "The Shopify store URL e.g. store-name.myshopify.com"
     required: true
-    default: "World"
   shopify-cli-theme-token:
     description: "The Shopify CLI theme token created via custom app"
     required: true
-    default: "World"
 runs:
   using: "composite"
   steps:
