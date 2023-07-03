@@ -4,26 +4,27 @@
 #
 # @devs For notes on creating composite actions: https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
 
-name: "Hello World"
-description: "Greet someone"
+name: "Shopify Auto Preview"
+description: "Creates/Updates a Shopify theme and adds the preview link within the PR description and as a comment"
 inputs:
   who-to-greet: # id of input
     description: "Who to greet"
     required: true
     default: "World"
-outputs:
-  random-number:
-    description: "Random number"
-    value: ${{ steps.random-number-generator.outputs.random-number }}
+  shopify-flag-store:
+    description: "The Shopify store URL e.g. store-name.myshopify.com"
+    required: true
+  shopify-cli-theme-token:
+    description: "The Shopify CLI theme token created via custom app"
+    required: true
+env:
+  SHOPIFY_FLAG_STORE: ${{ inputs.shopify-flag-store }}
+  SHOPIFY_CLI_THEME_TOKEN: ${{ inputs.shopify-cli-theme-token }}
+  SHOPIFY_CLI_TTY: 0 # https://shopify.dev/docs/themes/tools/cli/ci-cd#step-2-integrate-shopify-cli-into-your-pipeline TODO when there is a theme limit, the following should stop interactive prompts but it doesn't seem to work
+
 runs:
   using: "composite"
   steps:
-    - run: echo Hello ${{ inputs.who-to-greet }}.
-      shell: bash
-    - id: random-number-generator
-      run: echo "random-number=$(echo $RANDOM)" >> $GITHUB_OUTPUT
-      shell: bash
-    - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
-      shell: bash
-    - run: goodbye.sh
+    - uses: actions/checkout@v3
+    - run: echo Hello ${{ inputs.shopify-flag-store }}.
       shell: bash
