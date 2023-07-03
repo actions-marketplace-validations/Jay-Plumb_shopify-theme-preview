@@ -5,9 +5,6 @@
 # @devs For notes on creating composite actions: https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
 name: "Shoify Auto Preview"
 description: "Creates/Updates a Shopify theme and adds the preview link within the PR description and as a comment"
-branding:
-  icon: shopping-cart
-  color: green
 inputs:
   shopify-flag-store:
     description: "The Shopify store URL e.g. store-name.myshopify.com"
