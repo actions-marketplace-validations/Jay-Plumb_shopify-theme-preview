@@ -5,7 +5,7 @@
 # @devs For notes on creating composite actions: https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
 name: "Auto Preview"
 on:
-  pull_request:
+  push:
 env:
   GH_TOKEN: ${{ github.token }}
   SHOPIFY_FLAG_STORE: ${{ secrets.SHOPIFY_DEV_STORE_URL }}
