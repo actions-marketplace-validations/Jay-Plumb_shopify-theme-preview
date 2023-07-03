@@ -8,8 +8,8 @@ on:
   push:
 env:
   GH_TOKEN: ${{ github.token }}
-  SHOPIFY_FLAG_STORE: ${{ secrets.SHOPIFY_DEV_STORE_URL }}
-  SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.STAGING_SHOP_ACCESS_TOKEN }}
+  SHOPIFY_FLAG_STORE: ${{ secrets.SHOPIFY_FLAG_STORE }}
+  SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
   SHOPIFY_CLI_TTY: 0 # https://shopify.dev/docs/themes/tools/cli/ci-cd#step-2-integrate-shopify-cli-into-your-pipeline TODO when there is a theme limit, the following should stop interactive prompts but it doesn't seem to work
 
 concurrency:
@@ -26,7 +26,7 @@ jobs:
 
       - name: Debug
         run: |
-          echo Hello ${{ inputs.shopify-flag-store }}.
+          echo Hello ${{ secrets.SHOPIFY_DEV_STORE_URL }}.
 
       - id: preview-link
         uses: Jay-Plumb/shopify-theme-preview@main # TODO
