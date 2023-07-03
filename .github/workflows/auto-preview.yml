@@ -25,7 +25,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - id: preview-link
-        uses: ./action.yml
+        uses: ../.././action.yml # TODO use v1
         with:
           shopify_flag_store: ${{ env.SHOPIFY_FLAG_STORE }}
           shopify_cli_theme_token: ${{ env.SHOPIFY_CLI_THEME_TOKEN }}
