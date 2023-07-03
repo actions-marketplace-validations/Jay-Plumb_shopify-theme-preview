@@ -21,3 +21,36 @@ runs:
         echo Hello ${{ inputs.shopify-flag-store }}.
         echo Hello ${{ inputs.shopify-cli-theme-token }}.
       shell: bash
+
+    - id: preview-link
+      uses: ./.github/actions/action-shopify-theme
+
+    - run: |
+      echo preview link ${{ steps.preview-link.outputs.preview-link }}
+      echo preview link ${{ steps.preview-link.outputs.editor-link }}
+
+    - name: Extend/Modify PR Description
+      uses: ./.github/actions/action-pr-description
+      with:
+        preview-link: ${{ steps.preview-link.outputs.preview-link }}
+        editor-link: ${{ steps.preview-link.outputs.editor-link }}
+
+      - name: Comment PR
+        uses: ./.github/actions/action-pr-comment
+        with:
+          preview-link: ${{ steps.preview-link.outputs.preview-link }}
+          editor-link: ${{ steps.preview-link.outputs.editor-link }}
+
+      - name: DEBUG Variables
+        run: |
+          echo ${{ env.JSON_RESPONSE }}
+          echo ${{ env.THEME_ID }}
+          echo ${{ env.PREVIEW_URL }}
+          echo ${{ env.EDITOR_URL }}
+          echo ${{ env.HAS_PREVIEW_LINK }}
+          echo ${{ github.event_name }}
+          echo ${{ github.event.action }}
+          echo ${{ github.workflow }}
+          echo ${{ github.ref }}
+          echo ${{ steps.fc.outputs.comment-id }}
+          echo ${{ github.event.pull_request.number }}
